@@ -7,7 +7,6 @@ class Game
 {
     public function run()
     {
-        system('stty -icanon -echo');
         $loop = EventFactory::create();
         Buffer::$screenHeight = (int) exec('tput lines') -1;
         Buffer::$screenWidth = (int) exec('tput cols');

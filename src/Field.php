@@ -15,14 +15,14 @@ class Field
     private function renderRightBorder()
     {
         for ($i = 0; $i < self::FIELDHEIGHT; $i++) {
-            Buffer::$buffer[$i][self::FIELDWITH - 1] = '.';
+            Buffer::$buffer[$i][self::FIELDWITH - 1] = "\033[47m \033[0m";
         }
     }
 
     private function renderBottomBorder()
     {
         for ($i = 0; $i < self::FIELDWITH; $i++) {
-            Buffer::$buffer[self::FIELDHEIGHT - 1][$i] = '.';
+            Buffer::$buffer[self::FIELDHEIGHT - 1][$i] = "\033[47m \033[0m";
         }
     }
 
@@ -44,8 +44,7 @@ class Field
             //somehow this staff helps to avoid cursor blinking
             echo "\033[J";
             $line = implode('', Buffer::$buffer[$rowNum]);
-            echo $line;
-            echo PHP_EOL;
+            echo $line . PHP_EOL;
             //somehow this staff helps to avoid cursor blinking
             echo "\e[?25l";
             // if ($rowNum < self::FIELDHEIGHT - 1) {
