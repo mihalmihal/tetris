@@ -3,8 +3,8 @@ namespace Tetris;
 
 class Field
 {
-    const FIELDWITH = 10;
-    const FIELDHEIGHT = 20;
+    const FIELDWITH = 30;
+    const FIELDHEIGHT = 30;
 
     public function renderBorders()
     {
@@ -28,12 +28,20 @@ class Field
 
     public function renderFigure()
     {
-        return '';
+        foreach($this->currentFigure->shapePattern as $rowKey => $rowValue) {
+            foreach ($rowValue as  $pointKey => $pointValue) {
+                $top = $this->currentFigure->coords['topCorner'] + $rowKey;
+                $left = $this->currentFigure->coords['leftCorner'] + $pointKey;
+                if ($pointValue > 0) {
+                    Buffer::$buffer[$top][$left] = $this->fillPoint($this->currentFigure->color);
+                }
+            }
+        }
     }
 
-    public function renderLand()
+    protected function fillPoint($color)
     {
-        return '';
+        return "\033[4{$color}m \033[0m";
     }
 
     public function draw()
@@ -61,5 +69,16 @@ class Field
             //     }
             // }
         }
+    }
+
+    public function setFigure($figure)
+    {
+        $this->currentFigure = $figure;
+        $this->currentFigure->setCoord('topCorner', 0);
+        $this->currentFigure->setCoord('leftCorner', self::FIELDWITH/2);
+    }
+    public function hasFigure()
+    {
+        return isset($this->currentFigure);
     }
 }
