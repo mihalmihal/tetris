@@ -21,14 +21,37 @@ class Game
         // $stdin = fopen('php://stdin', 'r');
         // stream_set_blocking($stdin, 0);
         $loop->addPeriodicTimer(0.1, function ()  {
-            if (!$this->field->hasFigure()) {
-                $figure = FiguresFactory::create();
-                $this->field->setFigure($figure);
-            }
             $this->field->renderFigure();
             $this->field->renderBorders();
             $this->field->draw();
         });
+
+        $loop->addPeriodicTimer(0.5, function() {
+            if (!$this->field->hasFigure()) {
+                $this->addNewFigure();
+            } else {
+                $this->step();
+            }
+        });
+
         $loop->run();
+    }
+
+    private function addNewFigure()
+    {
+        $figure = FiguresFactory::create();
+        $this->field->setFigure($figure);
+    }
+
+    private function step()
+    {
+        if ($this->field->checkIfMoveDownIsAllowed()) {
+            $this->field->currentFigure->moveDown();
+        } elseif ($this->field->currentFigure->getCoords('topCorner') == 0) {
+            die('GAME OVER' . PHP_EOL);
+        } else {
+            $this->field->destroyFigure();
+        }
+
     }
 }

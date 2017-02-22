@@ -12,7 +12,7 @@ class FiguresFactory
     5: Magenta/Purple
     6: Cyan
     */
-    private static $colors = [1, 2, 3, 4, 5, 6, 7];
+    private static $colors = [1, 2, 3, 4, 5, 6];
 
     public static function create() {
         $shape = self::getRandomValue(self::$shapes);

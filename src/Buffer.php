@@ -11,7 +11,7 @@ class Buffer
     {
         for ($i = 0; $i < self::$screenHeight; $i++) {
             for ($k = 0; $k < self::$screenWidth; $k++) {
-                self::$buffer[$i][$k] = '.';
+                self::$buffer[$i][$k] = ' ';
             }
         }
     }
