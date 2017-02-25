@@ -7,6 +7,7 @@ class Field
     const FIELDHEIGHT = 30;
     const BORDERCOLOR = "\033[47m \033[0m";
     public $currentFigure = false;
+    public $isBlocked = false;
 
     public function renderBorders()
     {
@@ -17,7 +18,7 @@ class Field
     private function renderRightBorder()
     {
         for ($i = 0; $i < self::FIELDHEIGHT; $i++) {
-            Buffer::$buffer[$i][self::FIELDWITH - 1] = self::BORDERCOLOR;
+            Buffer::$buffer[$i][self::FIELDWITH] = self::BORDERCOLOR;
         }
     }
 
@@ -79,19 +80,6 @@ class Field
             echo $line . PHP_EOL;
             //somehow this staff helps to avoid cursor blinking
             echo "\e[?25l";
-            // if ($rowNum < self::FIELDHEIGHT - 1) {
-                // $line = implode('', $this->buffer[$rowNum]);
-                // echo $line;
-                // echo PHP_EOL;
-                // continue;
-            // }
-            // foreach ($row as $colNum => $col) {
-            //     if($colNum < self::FIELDWITH - 1){
-            //         echo '0';
-            //     } else {
-            //         $remainingColsInRow = $this->buffer::$screenWidth - ($colNum);
-            //     }
-            // }
         }
     }
 
@@ -101,22 +89,24 @@ class Field
         $this->currentFigure->setCoord('topCorner', 0);
         $this->currentFigure->setCoord('leftCorner', self::FIELDWITH/2);
     }
+
     public function hasFigure()
     {
         return $this->currentFigure !== false;
     }
 
-    public function checkIfMoveDownIsAllowed()
+    public function checkIfMoveIsAllowed($topDirection = 0, $leftDirection = 0)
     {
         foreach($this->currentFigure->shapePattern as $rowKey => $rowValue) {
             foreach ($rowValue as  $pointKey => $pointValue) {
-                $top = $this->currentFigure->getCoords('topCorner') + $rowKey + 1;
-                $left = $this->currentFigure->getCoords('leftCorner') + $pointKey;
-                if ($pointValue > 0) {
-                    if(Buffer::$buffer[$top][$left] == self::BORDERCOLOR) {
+                if ($pointValue == 0) {
+                    continue;
+                }
+                $top = $this->currentFigure->getCoords('topCorner') + $rowKey + $topDirection;
+                $left = $this->currentFigure->getCoords('leftCorner') + $pointKey + $leftDirection;
+                    if($left < 0 || $top >= self::FIELDHEIGHT || Buffer::$buffer[$top][$left] == self::BORDERCOLOR) {
                         return false;
                     }
-                }
             }
         }
         return true;
@@ -126,5 +116,25 @@ class Field
     {
         $this->moveFigureToNewPlace(self::BORDERCOLOR);
         $this->currentFigure = false;
+    }
+
+    public function clearFilledRows()
+    {
+        $rowsWasDeleted = false;
+        for ($i = 0; $i < self::FIELDHEIGHT - 1; $i++) {
+            $filled = 0;
+            for ($k = 0; $k < self::FIELDWITH; $k++) {
+                if (Buffer::$buffer[$i][$k] == self::BORDERCOLOR) {
+                    $filled++;
+                }
+            }
+            if ($filled == self::FIELDWITH) {
+                unset(Buffer::$buffer[$i]);
+                $emptyRow = Buffer::$buffer[Buffer::$screenHeight - 1];
+                array_unshift(Buffer::$buffer, $emptyRow);
+                $rowsWasDeleted = true;
+            }
+        }
+        $this->isBlocked = $rowsWasDeleted;
     }
 }

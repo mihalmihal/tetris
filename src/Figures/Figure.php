@@ -27,9 +27,21 @@ class Figure
         return $this->color;
     }
 
-    public function moveDown()
+    public function moveDown($rowsToMove = 1)
     {
         $topCorner = $this->getCoords('topCorner');
-        $this->setCoord('topCorner', $topCorner + 1);
+        $this->setCoord('topCorner', $topCorner + $rowsToMove);
+    }
+
+    public function moveLeft()
+    {
+        $leftCorner = $this->getCoords('leftCorner');
+        $this->setCoord('leftCorner', $leftCorner - 1);
+    }
+
+    public function moveRight()
+    {
+        $leftCorner = $this->getCoords('leftCorner');
+        $this->setCoord('leftCorner', $leftCorner + 1);
     }
 }
