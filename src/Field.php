@@ -53,7 +53,8 @@ class Field
         if (!$color) {
             $color = $this->fillPoint($this->currentFigure->color);
         }
-        foreach($this->currentFigure->shapePattern as $rowKey => $rowValue) {
+        $pattern = $this->currentFigure->getShapePattern();
+        foreach($pattern as $rowKey => $rowValue) {
             foreach ($rowValue as  $pointKey => $pointValue) {
                 $top = $this->currentFigure->getCoords('topCorner') + $rowKey;
                 $left = $this->currentFigure->getCoords('leftCorner') + $pointKey;
@@ -97,7 +98,8 @@ class Field
 
     public function checkIfMoveIsAllowed($topDirection = 0, $leftDirection = 0)
     {
-        foreach($this->currentFigure->shapePattern as $rowKey => $rowValue) {
+        $pattern = $this->currentFigure->getShapePattern();
+        foreach($pattern as $rowKey => $rowValue) {
             foreach ($rowValue as  $pointKey => $pointValue) {
                 if ($pointValue == 0) {
                     continue;

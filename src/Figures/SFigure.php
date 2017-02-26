@@ -3,8 +3,15 @@ namespace Tetris\Figures;
 
 class SFigure extends Figure
 {
-    public $shapePattern = [
-        [0, 1, 1],
-        [1, 1, 0]
+    public $shapePatterns = [
+        [
+            [0, 1, 1],
+            [1, 1, 0]
+        ],
+        [
+            [1, 0],
+            [1, 1],
+            [0, 1],
+        ]
     ];
 }
