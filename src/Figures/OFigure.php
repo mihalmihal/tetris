@@ -3,7 +3,7 @@ namespace Tetris\Figures;
 
 class OFigure extends Figure
 {
-    public $shapePatterns = [
+    protected $shapePatterns = [
         [
             [1, 1],
             [1, 1]
