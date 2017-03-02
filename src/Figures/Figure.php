@@ -11,6 +11,7 @@ class Figure
     public function __construct($color)
     {
         $this->color = $color;
+        $this->currentPattern = $this->shapePatterns[0];
     }
 
     public function setCoord($coord, $value)
@@ -26,6 +27,11 @@ class Figure
     public function getColor()
     {
         return $this->color;
+    }
+
+    public function getShapePattern()
+    {
+        return $this->currentPattern;
     }
 
     public function moveDown($rowsToMove = 1)
@@ -53,5 +59,14 @@ class Figure
             $next = reset($this->shapePatterns);
         }
         $this->currentPattern = $next;
+    }
+
+    public function rollbackRotation()
+    {
+        $prev = prev($this->shapePatterns);
+        if ($prev === false) {
+            $prev = end($this->shapePatterns);
+        }
+        $this->currentPattern = $prev;
     }
 }

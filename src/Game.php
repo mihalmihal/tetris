@@ -87,6 +87,12 @@ class Game
                     $this->field->currentFigure->moveDown(self::DOWNSPEED);
                 }
                 break;
+            case 32:
+                $this->field->currentFigure->rotate();
+                if (!$this->field->checkIfMoveIsAllowed(self::DOWNSPEED)) {
+                    $this->field->currentFigure->rollbackRotation();
+                }
+                break;
         }
     }
 }
